@@ -1,0 +1,5 @@
+package com.example.OneToMany.entity;
+
+public class Department {
+
+}

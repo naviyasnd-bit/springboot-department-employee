@@ -1,0 +1,66 @@
+package com.example.OneToMany.service;
+
+import com.example.OneToMany.entity.Department;
+import com.example.OneToMany.exception.ResourceNotFoundException;
+import com.example.OneToMany.fileHandling.ExcelFileHandler;
+import com.example.OneToMany.repository.DepartmentRepository;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class DepartmentServiceImpl implements DepartmentService {
+
+    private final DepartmentRepository repository;
+    private final ExcelFileHandler excelFileHandler;
+
+    public DepartmentServiceImpl(DepartmentRepository repository, ExcelFileHandler excelFileHandler) {
+        this.repository = repository;
+        this.excelFileHandler = excelFileHandler;
+    }
+
+    @Override
+    public Department saveDepartment(Department department) {
+        Department savedDept = repository.save(department);
+        excelFileHandler.writeDepartmentsToExcel(repository.findAll());
+        return savedDept;
+    }
+
+    @Override
+    public List<Department> getAllDepartments() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Department getDepartmentById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
+    }
+
+    @Override
+    public Department updateDepartment(Long id, Department department) {
+        Department dept = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
+
+        dept.setName(department.getName());
+        dept.setEmployees(department.getEmployees());
+        Department updated = repository.save(dept);
+        excelFileHandler.writeDepartmentsToExcel(repository.findAll());
+        return updated;
+    }
+
+    @Override
+    public String deleteDepartment(Long id) {
+        Department dept = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
+
+        repository.delete(dept);
+        excelFileHandler.writeDepartmentsToExcel(repository.findAll());
+        return "Department deleted successfully";
+    }
+}
+
+
+
+
+
+

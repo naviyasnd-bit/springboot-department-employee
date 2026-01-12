@@ -1,0 +1,79 @@
+package com.example.OneToMany.service;
+
+import com.example.OneToMany.entity.Department;
+import com.example.OneToMany.entity.Employee;
+import com.example.OneToMany.exception.ResourceNotFoundException;
+import com.example.OneToMany.repository.DepartmentRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class DepartmentServiceImpl implements DepartmentService {
+
+    private final DepartmentRepository repository;
+
+    public DepartmentServiceImpl(DepartmentRepository repository) {
+        this.repository = repository;
+    }
+
+    // CREATE
+    @Override
+    public Department saveDepartment(Department department) {
+        //creating department with employees
+        Department dept = new Department();
+        dept.setName("IT");
+
+        Employee e1 = new Employee();
+        e1.setName("Alice");
+        e1.setDepartment(dept);
+
+        Employee e2 = new Employee();
+        e2.setName("Bob");
+        e2.setDepartment(dept);
+
+        dept.setEmployees(List.of(e1, e2));
+
+        return repository.save(dept);
+    }
+
+    // READ ALL
+    @Override
+    public List<Department> getAllDepartments() {
+        return repository.findAll();
+    }
+
+    // READ BY ID
+    @Override
+    public Department getDepartmentById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Department not found with id: " + id));
+    }
+
+    // UPDATE
+    @Override
+    public Department updateDepartment(Long id) {
+        Department dept = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Department not found with id: " + id));
+
+        dept.setName("Updated IT");
+        return repository.save(dept);
+    }
+
+    // DELETE
+    @Override
+    public String deleteDepartment(Long id) {
+        Department dept = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Department not found with id: " + id));
+
+        repository.delete(dept);
+        return "Department deleted successfully";
+    }
+}
+
+
+
+

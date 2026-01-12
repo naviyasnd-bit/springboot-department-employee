@@ -1,0 +1,5 @@
+package com.example.OneToMany.service;
+
+public class DepartmentService {
+
+}

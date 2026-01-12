@@ -1,0 +1,51 @@
+package com.example.OneToMany.service;
+
+import com.example.OneToMany.entity.Department;
+import java.util.List;
+
+public interface DepartmentService {
+
+    Department saveDepartment(Department department);
+
+    List<Department> getAllDepartments();
+
+    Department getDepartmentById(Long id);
+
+    Department updateDepartment(Long id, Department department);
+
+    String deleteDepartment(Long id);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

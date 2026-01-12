@@ -1,0 +1,5 @@
+package com.example.OneToMany.exception;
+
+public class GlobalExceptionHandler {
+
+}

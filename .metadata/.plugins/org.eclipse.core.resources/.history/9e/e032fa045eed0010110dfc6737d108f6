@@ -1,0 +1,36 @@
+package com.example.OneToMany.service;
+
+import com.example.OneToMany.entity.Department;
+import com.example.OneToMany.entity.Employee;
+import com.example.OneToMany.repository.DepartmentRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class DepartmentService {
+
+    private final DepartmentRepository repo;
+
+    public DepartmentService(DepartmentRepository repo) {
+        this.repo = repo;
+    }
+
+    public Department saveDepartment() {
+
+        Department dept = new Department();
+        dept.setName("IT");
+
+        Employee e1 = new Employee();
+        e1.setName("Alice");
+        e1.setDepartment(dept);
+
+        Employee e2 = new Employee();
+        e2.setName("Bob");
+        e2.setDepartment(dept);
+
+        dept.setEmployeres(List.of(e1, e2));
+
+        return repo.save(dept); 
+    }
+}

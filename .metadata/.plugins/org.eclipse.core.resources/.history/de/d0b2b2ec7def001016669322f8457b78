@@ -1,0 +1,38 @@
+package com.example.OneToMany.fileHandling;
+
+import com.example.OneToMany.entity.Department;
+import org.springframework.stereotype.Component;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
+@Component
+public class ExcelFileHandler {
+
+    // Change the file path to your project directory
+    private static final String FILE_PATH = 
+        "D:/Eclipse Workspace/DatabaseRelationTypes/OneToManyEntity/OneToManyRelation/departments.csv";
+
+    public void writeDepartmentsToExcel(List<Department> departments) {
+        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+
+            // Write header
+            writer.append("ID,Name\n");
+
+            // Write data
+            for (Department dept : departments) {
+                writer.append(String.valueOf(dept.getId()))
+                      .append(",")
+                      .append(dept.getName())
+                      .append("\n");
+            }
+
+            writer.flush();
+            System.out.println("Departments written to Excel file successfully: " + FILE_PATH);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

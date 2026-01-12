@@ -1,0 +1,83 @@
+package com.example.OneToMany.service;
+
+import com.example.OneToMany.entity.Department;
+import com.example.OneToMany.entity.Employee;
+import com.example.OneToMany.repository.DepartmentRepository;
+import com.example.OneToMany.service.DepartmentService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class DepartmentServiceImpl implements DepartmentService {
+
+    private final DepartmentRepository repository;
+
+    public DepartmentServiceImpl(DepartmentRepository repository) {
+        this.repository = repository;
+    }
+
+    // CREATE
+    @Override
+    public Department saveDepartment() {
+
+        Department dept = new Department();
+        dept.setName("IT");
+
+        Employee e1 = new Employee();
+        e1.setName("Alice");
+        e1.setDepartment(dept);
+
+        Employee e2 = new Employee();
+        e2.setName("Bob");
+        e2.setDepartment(dept);
+
+        dept.setEmployees(List.of(e1, e2));
+
+        return repository.save(dept);
+    }
+
+    // READ ALL
+    @Override
+    public List<Department> getAllDepartments() {
+        return repository.findAll();
+    }
+
+    // READ BY ID 
+    @Override
+    public Department getDepartmentById(Long id) {
+        try {
+            return repository.findById(id).get();
+        } catch (Exception e) {
+            System.out.println("Department not found");
+            return null;
+        }
+    }
+
+    // UPDATE 
+    @Override
+    public Department updateDepartment(Long id) {
+        try {
+            Department dept = repository.findById(id).get();
+            dept.setName("Updated IT");
+            return repository.save(dept);
+        } catch (Exception e) {
+            System.out.println("Update failed");
+            return null;
+        }
+    }
+
+    // DELETE 
+    @Override
+    public String deleteDepartment(Long id) {
+        try {
+            repository.deleteById(id);
+            return "Department deleted successfully";
+        } catch (Exception e) {
+            return "Delete failed";
+        }
+    }
+}
+
+
+

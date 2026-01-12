@@ -1,0 +1,22 @@
+package com.example.OneToMany.controller;
+
+import com.example.OneToMany.entity.Department;
+import com.example.OneToMany.service.DepartmentService;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/department")
+public class DepartmentController {
+
+    private final DepartmentService service;
+
+    public DepartmentController(DepartmentService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/save")
+    public Department save() {
+        return service.saveDepartment();
+    }
+}
+
